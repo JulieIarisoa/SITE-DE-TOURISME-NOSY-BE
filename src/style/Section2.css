@@ -1,0 +1,129 @@
+#Apropos {
+  background-color: #f9f9f9;
+  padding: 60px 20px;
+}
+
+.apropos-container {
+  display: flex;
+  align-items: flex-start; /* alignement en haut */
+  justify-content: center;
+  flex-wrap: wrap;          /* permet l’empilement sur petit écran */
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 40px;
+}
+
+.icon{
+  color: #3498db;
+}
+/* Slider */
+.slider {
+  flex: 1 1 45%;            /* côté à côté sur grand écran */
+  max-width: 500px;
+  height: 420px;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Contenu texte */
+.apropos-content {
+  flex: 1 1 45%;           /* côté à côté sur grand écran */
+  max-width: 600px;
+  color: #161629;
+}
+
+.apropos-content h2 {
+  text-align: center;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #161629;
+    margin-bottom: 1rem;
+    position: relative;
+    background: linear-gradient(90deg, #3498db, #5dade2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.apropos-content h2::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #3498db;
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+.apropos-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.apropos-content .btn {
+  margin-top: 10px;
+  border-radius: 30px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.apropos-content .btn:hover {
+  transform: scale(1.05);
+}
+
+/* ----------- Responsive ------------- */
+@media (max-width: 1024px) {
+  .apropos-container {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .apropos-container {
+    flex-direction: column; /* empilement vertical sur tablette/mobile */
+    align-items: center;
+    text-align: center;
+  }
+
+  .slider {
+    max-width: 90%;
+    height: 250px;
+  }
+
+  .apropos-content {
+    max-width: 90%;
+  }
+
+  .apropos-content h2 {
+    font-size: 1.6rem;
+  }
+
+  .apropos-content p {
+    font-size: 0.95rem;
+  }
+
+  .apropos-content .btn {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider {
+    height: 200px;
+  }
+}

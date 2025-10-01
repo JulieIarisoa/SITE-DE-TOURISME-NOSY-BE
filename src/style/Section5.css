@@ -1,0 +1,45 @@
+.icon{
+  color: #3498db;
+}
+.location-section {
+    padding: 3rem 1.5rem;
+    background-color: #f4f6f8;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .location-section h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #161629;
+    margin-bottom: 1rem;
+    position: relative;
+    background: linear-gradient(90deg, #3498db, #5dade2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.location-section h2::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #3498db;
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+  
+  .location-section p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  .map-container {
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  

@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+:root {
+  --text-light: #fff;
+  --primary-color: rgba(125, 205, 248, 0.7);
+}
+
+#logo {
+  max-height: 40px;
+  border-radius: 50%;
+}
+
+/* Effet “glass” */
+.bg-glass {
+  backdrop-filter: blur(10px);
+  background-color: #0000002a;
+}
+
+/* Liens nav */
+.navbar-nav .nav-link {
+  color: var(--text-light);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: rgba(22, 22, 41, 0.9);
+}
+.dropdown-item {
+  color: var(--text-light);
+}
+.dropdown-item:hover {
+  background-color: var(--primary-color);
+  color: #000;
+}
