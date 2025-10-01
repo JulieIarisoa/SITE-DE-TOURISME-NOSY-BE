@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 function Footer() {
   const [t, i18n] = useTranslation("global");
-  return (
     /********** Footer du site **********/
+  return (
     <footer className="footer">
       <div className="footer-container">
 
