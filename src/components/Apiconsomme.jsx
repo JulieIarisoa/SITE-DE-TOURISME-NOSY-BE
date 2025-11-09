@@ -10,7 +10,7 @@ const Testimonials = () => {
   const [nom, setNom] = useState("");
   const [commentaire, setCommentaire] = useState("");
 
-  const API = (import.meta.env.VITE_API_URL || "http://localhost:8090/").replace(/\/?$/, "/");
+  const API = (import.meta.env.VITE_API_URL || "https://back-tourisme-production.up.railway.app/").replace(/\/?$/, "/");
 
   // 🔹 Récupération des témoignages
   useEffect(() => {
