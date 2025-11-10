@@ -132,17 +132,13 @@ const Testimonials = () => {
             {temoignages.map((t) => (
               <div className="col" key={t.id}>
                 <div className="card border-0 shadow-sm rounded-4 h-100 p-3 position-relative">
-                  <button
-                    type="button"
-                    className="btn-close position-absolute top-0 end-0 m-2"
-                    onClick={() => handleDelete(t.id)}
-                  ></button>
+                  
                   <div className="card-body">
                     <p className="fst-italic text-secondary">“{t.commentaire}”</p>
-                    <h6 className="fw-bold text-primary mt-2">{t.nom}</h6>
-                    <small className="text-muted">
-                      {t.date_temoin
-                        ? new Date(t.date_temoin).toLocaleDateString()
+                    <h6 className="fw-bold text-primary mt-2 justify-content-end d-flex">{t.nom}</h6>
+                    <small className=" text-secondary justify-content-end d-flex">
+                      {t.Daty
+                        ? new Date(t.Daty).toLocaleDateString()
                         : ""}
                     </small>
                   </div>

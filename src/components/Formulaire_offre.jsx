@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../style/Section3.css';
-import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTags, faClock, faPiggyBank, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -8,112 +8,351 @@ import { useTranslation } from 'react-i18next';
 function Section3() {
   const [t] = useTranslation("global");
 
-  // 🧩 Offres depuis la base
-  const [offres, setOffres] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedTour, setSelectedTour] = useState(null);
+  // 🔹 États pour les prix récupérés depuis la base
+  const [offresPrix, setOffresPrix] = useState([]);
 
-  // 🟢 Récupération des données depuis l’API
+  // 🔹 Charger les prix depuis l’API (Railway)
   useEffect(() => {
-    const fetchOffres = async () => {
+    const fetchPrix = async () => {
       try {
         const res = await axios.get("https://back-tourisme-production.up.railway.app/offre");
-        setOffres(res.data);
-        setLoading(false);
+        setOffresPrix(res.data);
       } catch (error) {
-        console.error("Erreur de chargement :", error);
-        setLoading(false);
+        console.error("Erreur de récupération des prix :", error);
       }
     };
-    fetchOffres();
+    fetchPrix();
   }, []);
 
-  // 🧭 Ouvrir/Fermer popup
-  const openPopup = (offre) => setSelectedTour(offre);
+  // 🔹 Fonction utilitaire : renvoyer le prix (si disponible)
+  const getPrix = (index, type) => {
+    if (offresPrix[index]) {
+      if (type === "enfant") return `${offresPrix[index].prix_enfant}`;
+      if (type === "adulte") return `${offresPrix[index].prix_adult}`;
+    }
+    return "—"; // valeur par défaut
+  };
+
+  // 🔹 Détails des offres (inchangé, sauf prix remplacé dynamiquement)
+  const tours = [
+    {
+      title: t("header.Sect3_titre_offre1"),
+      details: t("header.Sect3_decription_offre1"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
+      schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 15h00',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(0, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Texte au-dessus de l’image */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🌴 N°1 – EXCURSION À NOSY IRANJA</h3>
+              <p className="fst-italic"><strong>Excursion d'une journée complète</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5">
+              <img src="image/Nosy_iranja.jpg" className="img-fluid rounded shadow-sm mb-2" alt="Nosy Iranja"/>
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre1")} {getPrix(0, "enfant")} €</li>
+                <li>{getPrix(0, "adulte")} € {t("header.Sect3_prix_parent_offre1")} </li>
+              </ul>
+              
+            </div>
+
+            
+            {/* Programme détaillé */}
+            <div className="col-12 col-lg-7">
+              <h5 className="mt-0 text-primary text-center">🕐 Programme du jour:</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_programme_offre1_programme1")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme2")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme3")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme4")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme5")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme6")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme7")}</li>
+                <li>{t("header.Sect3_programme_offre1_programme8")}</li>
+              </ul>
+
+              <h5 className="mt-3 text-primary">{t("header.Sect3_vocabs_inclus")}</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre1")}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      )
+    },
+    {
+      title: t("header.Sect3_titre_offre2"),
+      details: t("header.Sect3_decription_offre2"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
+      schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 15h30',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(1, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Texte au-dessus de l’image */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🌴 N°2 – LES 3 ÎLES</h3>
+              <p className="fst-italic"><strong>Excursion d'une journée complète</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5 mb-3">
+              <img src="image/Trois_iles.jpg" className="img-fluid rounded shadow-sm mb-2" alt="Nosy 3 Îles" />
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre2")}{getPrix(1, "enfant")} €</li>
+                <li>{getPrix(1, "adulte")} € {t("header.Sect3_prix_parent_offre2")}</li>
+              </ul>
+              
+              <h5 className="mt-3 text-primary">{t("header.Sect3_vocabs_inclus")}</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre2")}</li>
+              </ul>
+            </div>
+
+            {/* Programme détaillé */}
+            <div className="col-12 col-lg-7">
+              <h5 className="text-primary">🕐 Programme du jour :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_programme_offre2_programme1")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme2")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme3")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme4")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme5")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme6")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme7")}</li>
+                <li>{t("header.Sect3_programme_offre2_programme8")}</li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+
+      )      
+    },
+    {
+      title: t("header.Sect3_titre_offre3"),
+      details: t("header.Sect3_decription_offre3"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
+      schedule:  t("header.Secr3_vocab_depart") + ': 06h30 ou 08h30 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(2, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Texte au-dessus de l’image */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🌴 N°3 – EXPÉDITION À MADAGASCAR</h3>
+              <p className="fst-italic"><strong>Excursion d'une journée</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5 text-center mb-3">
+              <img src="image/Madagascar_grand_ile.PNG" className="img-fluid rounded shadow-sm mb-2" alt="Expédition Madagascar" />
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre3")}{getPrix(2, "enfant")} €</li>
+                <li>{getPrix(2, "adulte")} € {t("header.Sect3_prix_parent_offre3")}</li>
+              </ul>
+              
+            </div>
+
+            {/* Programme détaillé */}
+            <div className="col-12 col-lg-7">
+              <h5 className="text-primary">🕐 Programme :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_programme_offre3_programme1")}</li>
+                <li>{t("header.Sect3_programme_offre3_programme2")}</li>
+                <li>{t("header.Sect3_programme_offre3_programme3")}</li>
+                <li>{t("header.Sect3_programme_offre3_programme4")}</li>
+                <li>{t("header.Sect3_programme_offre3_programme5")}</li>
+              </ul>
+
+              <h5 className="text-success mt-3">✅ Inclus :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre3")}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: t("header.Sect3_titre_offre4"),
+      details: t("header.Sect3_decription_offre4"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
+      schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(3, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Titre et description */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🌴 N°4 – VISITE DE L’ÎLE NOSY BE</h3>
+              <p className="fst-italic"><strong>Excursion d'une journée complète</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5 text-center mb-3">
+              <img src="image/Nosy_be_hell_ville.jpg" className="img-fluid rounded shadow-sm mb-2" alt="Nosy Be" />
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre3")}{getPrix(3, "enfant")} €</li>
+                <li>{getPrix(3, "adulte")} € {t("header.Sect3_prix_parent_offre3")}</li>
+              </ul>
+            </div>
+
+            {/* Programme détaillé */}
+            <div className="col-12 col-lg-7">
+              <h5 className="text-primary">🕐 Programme :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_programme_offre4_programme1")}</li>
+                <li>{t("header.Sect3_programme_offre4_programme2")}</li>
+                <li>{t("header.Sect3_programme_offre4_programme3")}</li>
+                <li>{t("header.Sect3_programme_offre4_programme4")}</li>
+                <li>{t("header.Sect3_programme_offre4_programme5")}</li>
+                <li>{t("header.Sect3_programme_offre4_programme6")}</li>
+              </ul>
+
+              <h5 className="text-success mt-3">✅ Inclus :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre4")}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      )
+    },
+    {
+      title: t("header.Sect3_titre_offre5"),
+      details: t("header.Sect3_decription_offre5"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1/2jour"),
+      schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 11h30',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(4, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Titre et description */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🌿 N°5 – RÉSERVE DE LOKOBE</h3>
+              <p className="fst-italic"><strong>Demi-journée</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5 text-center mb-3">
+              <img src="image/Lokobe_reserve.png" className="img-fluid rounded shadow-sm mb-2" alt="Lokobe" />
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre5")}{getPrix(4, "enfant")} €</li>
+                <li>{getPrix(4, "adulte")} € {t("header.Sect3_prix_parent_offre5")}</li>
+              </ul>
+            </div>
+
+            {/* Programme détaillé */}
+            <div className="col-12 col-lg-7">
+              <h5 className="text-primary">🕐 Programme :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_programme_offre5_programme1")}</li>
+                <li>{t("header.Sect3_programme_offre5_programme2")}</li>
+                <li>{t("header.Sect3_programme_offre5_programme3")}</li>
+                <li>{t("header.Sect3_programme_offre5_programme4")}</li>
+              </ul>
+
+              <h5 className="text-success mt-3">✅ Inclus :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre5")}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: t("header.Sect3_titre_offre6"),
+      details: t("header.Sect3_decription_offre6"),
+      duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
+      schedule: t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(5, "adulte") + " €",
+      programme: (
+        <div className="container-fluid p-3">
+          <div className="row g-3 align-items-start">
+            {/* Titre et description */}
+            <div className="col-12 text-center mb-3">
+              <h3 className="text-success">🐢 N°6 – SNORKELING À NOSY SAKATIA</h3>
+              <p className="fst-italic"><strong>Demi-journée</strong></p>
+            </div>
+
+            {/* Image + prix */}
+            <div className="col-12 col-lg-5 text-center mb-3">
+              <img src="image/Nosy_sakatia.png" className="img-fluid rounded shadow-sm mb-2" alt="Snorkeling" />
+              
+              <ul className="list-unstyled ms-3">
+                <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre6")}{getPrix(5, "enfant")} €</li>
+                <li>{getPrix(5, "adulte")} € {t("header.Sect3_prix_parent_offre6")}</li>
+              </ul>
+            </div>
+
+            {/* Inclus */}
+            <div className="col-12 col-lg-7">
+              <h5 className="text-success">✅ Inclus :</h5>
+              <ul className="list-unstyled ms-3">
+                <li>{t("header.Sect3_inclus_offre6")}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      )
+    },
+  ];
+
+  const [selectedTour, setSelectedTour] = useState(null);
+
+  const openPopup = (index) => setSelectedTour(tours[index]);
   const closePopup = () => setSelectedTour(null);
 
-  // 🔒 Bloquer le scroll quand popup ouverte
   useEffect(() => {
     document.body.style.overflow = selectedTour ? 'hidden' : '';
   }, [selectedTour]);
 
-  // 🧱 Affichage
   return (
     <section className='container' id='offre'>
       <h2 id='offre_titre'>
         <FontAwesomeIcon icon={faTags} className='icon' /> {t("header.btn_offres")}
       </h2>
 
-      {loading ? (
-        <p className="text-center text-secondary">Chargement des offres...</p>
-      ) : (
-        <div className='offres'>
-          {offres.map((offre, index) => (
-            <div className="box-popup" key={index}>
-              <h2>{offre.titre}</h2>
-              <p>{offre.description}</p>
-              <p><FontAwesomeIcon icon={faHourglassHalf} className='icon' /> {t("header.Secr3_vocab_durée")} : {offre.duree}</p>
-              <p><FontAwesomeIcon icon={faClock} className='icon' /> {t("header.Secr3_vocab_depart")} : 08h00</p>
-              <p>
-                <FontAwesomeIcon icon={faPiggyBank} className='icon' />{" "}
-                {t("header.Secr3_vocab_prix")} :
-                {" "}
-                {offre.prix_adult
-                  ? `${offre.prix_adult} Ar`
-                  : "Non défini"}
-              </p>
+      <div className='offres'>
+        {tours.map((tour, index) => (
+          <div className="box-popup" key={index}>
+            <h2>{tour.title}</h2>
+            <p>{tour.details}</p>
+            <p><FontAwesomeIcon icon={faHourglassHalf} className='icon' /> {tour.duration}</p>
+            <p><FontAwesomeIcon icon={faClock} className='icon' /> {tour.schedule}</p>
+            <p><FontAwesomeIcon icon={faPiggyBank} className='icon' /> {tour.price}</p>
+            <button onClick={() => openPopup(index)} className="btn btn-outline-primary">
+              {t("header.btn_detail_program")}
+            </button>
+          </div>
+        ))}
+      </div>
 
-              <button
-                onClick={() => openPopup(offre)}
-                className="btn btn-outline-primary"
-              >
-                {t("header.btn_detail_program")}
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 🪟 Popup détails de l’offre */}
       {selectedTour && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={e => e.stopPropagation()}>
             <button className="close-btn" onClick={closePopup}>×</button>
-
-            <div className="container-fluid p-3">
-              <div className="row g-3 align-items-start">
-                {/* Titre */}
-                <div className="col-12 text-center mb-3">
-                  <h3 className="text-success">🌴 {selectedTour.titre}</h3>
-                  <p className="fst-italic"><strong>{selectedTour.duree}</strong></p>
-                </div>
-
-                {/* Image (optionnelle si tu en ajoutes dans la base plus tard) */}
-                <div className="col-12 col-lg-5 text-center mb-3">
-                  <img
-                    src="image/default_offre.jpg"
-                    className="img-fluid rounded shadow-sm mb-2"
-                    alt={selectedTour.titre}
-                  />
-                  <ul className="list-unstyled ms-3">
-                    <li className="fs-5 text-success text-body text-center">
-                      💶 {t("header.Secr3_vocab_prix")}
-                    </li>
-                    <li>Enfant : {selectedTour.prix_enfant} Ar</li>
-                    <li>Adulte : {selectedTour.prix_adult} Ar</li>
-                  </ul>
-                </div>
-
-                {/* Programme détaillé */}
-                <div className="col-12 col-lg-7">
-                  <h5 className="text-primary text-center">🕐 Programme du jour :</h5>
-                  <p className="ms-3">{selectedTour.programme_detail}</p>
-
-                  <h5 className="text-success mt-3">✅ Inclus :</h5>
-                  <p className="ms-3">{selectedTour.inclus}</p>
-                </div>
-              </div>
-            </div>
+            {selectedTour.programme}
           </div>
         </div>
       )}

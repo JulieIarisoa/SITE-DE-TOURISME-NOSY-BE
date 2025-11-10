@@ -1,21 +1,46 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../style/Section3.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTags, faClock, faPiggyBank, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 function Section3() {
-  //Pour le traduction de langue
   const [t] = useTranslation("global");
-  
-  //details des offres (6 offres)
+
+  // 🔹 États pour les prix récupérés depuis la base
+  const [offresPrix, setOffresPrix] = useState([]);
+
+  // 🔹 Charger les prix depuis l’API (Railway)
+  useEffect(() => {
+    const fetchPrix = async () => {
+      try {
+        const res = await axios.get("https://back-tourisme-production.up.railway.app/offre");
+        setOffresPrix(res.data);
+      } catch (error) {
+        console.error("Erreur de récupération des prix :", error);
+      }
+    };
+    fetchPrix();
+  }, []);
+
+  // 🔹 Fonction utilitaire : renvoyer le prix (si disponible)
+  const getPrix = (index, type) => {
+    if (offresPrix[index]) {
+      if (type === "enfant") return `${offresPrix[index].prix_enfant}`;
+      if (type === "adulte") return `${offresPrix[index].prix_adult}`;
+    }
+    return "—"; // valeur par défaut
+  };
+
+  // 🔹 Détails des offres (inchangé, sauf prix remplacé dynamiquement)
   const tours = [
     {
       title: t("header.Sect3_titre_offre1"),
       details: t("header.Sect3_decription_offre1"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
       schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 15h00',
-      price: t("header.Secr3_vocab_prix")+' : 50€',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(0, "adulte") + " €",
       programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
@@ -31,8 +56,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre1")}</li>
-                <li>{t("header.Sect3_prix_parent_offre1")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre1")} {getPrix(0, "enfant")} €</li>
+                <li>{getPrix(0, "adulte")} € {t("header.Sect3_prix_parent_offre1")} </li>
               </ul>
               
             </div>
@@ -67,7 +92,7 @@ function Section3() {
       details: t("header.Sect3_decription_offre2"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
       schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 15h30',
-      price: t("header.Secr3_vocab_prix")+' : 60€',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(1, "adulte") + " €",
       programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
@@ -83,8 +108,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre2")}</li>
-                <li>{t("header.Sect3_prix_parent_offre2")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre2")}{getPrix(1, "enfant")} €</li>
+                <li>{getPrix(1, "adulte")} € {t("header.Sect3_prix_parent_offre2")}</li>
               </ul>
               
               <h5 className="mt-3 text-primary">{t("header.Sect3_vocabs_inclus")}</h5>
@@ -118,7 +143,7 @@ function Section3() {
       details: t("header.Sect3_decription_offre3"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
       schedule:  t("header.Secr3_vocab_depart") + ': 06h30 ou 08h30 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
-      price: t("header.Secr3_vocab_prix")+' : 70€',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(2, "adulte") + " €",
       programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
@@ -134,8 +159,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre3")}</li>
-                <li>{t("header.Sect3_prix_parent_offre3")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre3")}{getPrix(2, "enfant")} €</li>
+                <li>{getPrix(2, "adulte")} € {t("header.Sect3_prix_parent_offre3")}</li>
               </ul>
               
             </div>
@@ -165,7 +190,8 @@ function Section3() {
       details: t("header.Sect3_decription_offre4"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
       schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
-      price: t("header.Secr3_vocab_prix")+' : 55€',programme: (
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(3, "adulte") + " €",
+      programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
             {/* Titre et description */}
@@ -180,8 +206,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre3")}</li>
-                <li>{t("header.Sect3_prix_parent_offre3")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre3")}{getPrix(3, "enfant")} €</li>
+                <li>{getPrix(3, "adulte")} € {t("header.Sect3_prix_parent_offre3")}</li>
               </ul>
             </div>
 
@@ -212,7 +238,8 @@ function Section3() {
       details: t("header.Sect3_decription_offre5"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1/2jour"),
       schedule:  t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 11h30',
-      price: t("header.Secr3_vocab_prix")+' : 45€',programme: (
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(4, "adulte") + " €",
+      programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
             {/* Titre et description */}
@@ -227,8 +254,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre5")}</li>
-                <li>{t("header.Sect3_prix_parent_offre5")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre5")}{getPrix(4, "enfant")} €</li>
+                <li>{getPrix(4, "adulte")} € {t("header.Sect3_prix_parent_offre5")}</li>
               </ul>
             </div>
 
@@ -256,7 +283,7 @@ function Section3() {
       details: t("header.Sect3_decription_offre6"),
       duration: t("header.Secr3_vocab_durée")+ ':' +t("header.Sect3_duration_1jour"),
       schedule: t("header.Secr3_vocab_depart") + ': 08h00 - ' +t("header.Secr3_vocab_retour") + ' : 16h30',
-      price: t("header.Secr3_vocab_prix")+' : 65€',
+      price: t("header.Secr3_vocab_prix")+' : '+getPrix(5, "adulte") + " €",
       programme: (
         <div className="container-fluid p-3">
           <div className="row g-3 align-items-start">
@@ -272,8 +299,8 @@ function Section3() {
               
               <ul className="list-unstyled ms-3">
                 <li className=" fs-5 text-success text-body text-center">💶 {t("header.Secr3_vocab_prix")}</li>
-                <li>{t("header.Sect3_prix_enfant_offre6")}</li>
-                <li>{t("header.Sect3_prix_parent_offre6")}</li>
+                <li>{t("header.Sect3_prix_enfant_offre6")}{getPrix(5, "enfant")} €</li>
+                <li>{getPrix(5, "adulte")} € {t("header.Sect3_prix_parent_offre6")}</li>
               </ul>
             </div>
 
@@ -296,20 +323,14 @@ function Section3() {
   const openPopup = (index) => setSelectedTour(tours[index]);
   const closePopup = () => setSelectedTour(null);
 
-  // Bloquer le scroll quand la popup d'un offre est ouverte
   useEffect(() => {
-    if (selectedTour) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = selectedTour ? 'hidden' : '';
   }, [selectedTour]);
 
-    /*********Section pour les offres ******************** */
   return (
     <section className='container' id='offre'>
       <h2 id='offre_titre'>
-        <FontAwesomeIcon icon={faTags} className='icon'/> {t("header.btn_offres")}
+        <FontAwesomeIcon icon={faTags} className='icon' /> {t("header.btn_offres")}
       </h2>
 
       <div className='offres'>
@@ -317,9 +338,9 @@ function Section3() {
           <div className="box-popup" key={index}>
             <h2>{tour.title}</h2>
             <p>{tour.details}</p>
-            <p><FontAwesomeIcon icon={faHourglassHalf} className='icon'/> {tour.duration}</p>
-            <p><FontAwesomeIcon icon={faClock} className='icon'/> {tour.schedule}</p>
-            <p><FontAwesomeIcon icon={faPiggyBank} className='icon'/> {tour.price}</p>
+            <p><FontAwesomeIcon icon={faHourglassHalf} className='icon' /> {tour.duration}</p>
+            <p><FontAwesomeIcon icon={faClock} className='icon' /> {tour.schedule}</p>
+            <p><FontAwesomeIcon icon={faPiggyBank} className='icon' /> {tour.price}</p>
             <button onClick={() => openPopup(index)} className="btn btn-outline-primary">
               {t("header.btn_detail_program")}
             </button>

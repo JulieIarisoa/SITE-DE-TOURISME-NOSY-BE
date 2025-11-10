@@ -7,7 +7,7 @@ import Section5 from "./components/Section5"
 import Section6 from "./components/Section6"
 import Apiconsomme from "./components/Apiconsomme"
 import Footer from "./components/Footer"
-import Offre from "./components/Formulaire_offre"
+//import Offre from "./components/Formulaire_offre"
 import './App.css'
 
 function App() {
@@ -24,7 +24,6 @@ function App() {
       <Section6 />
       <Section4 />
       <Apiconsomme />
-      <Offre />
       <Footer />
     </>
   )
